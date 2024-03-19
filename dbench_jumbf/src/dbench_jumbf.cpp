@@ -9,7 +9,7 @@
 namespace dbench {
 	void print_lib_version()
 	{
-		std::cout << "Doublebench JUMBF " << major_ver << "." << minor_ver << "." << patch_ver << std::endl;
+		std::cout << "Doublebench JUMBF Library : v" << major_ver << "." << minor_ver << "." << patch_ver << std::endl;
 	}
 	// n should be 1<=n<=8;
 	bool isNthBitSet_1(unsigned char byte, int n)

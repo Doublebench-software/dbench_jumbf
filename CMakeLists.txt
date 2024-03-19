@@ -13,3 +13,6 @@ project ("Dbench_JUMBF")
 
 # Include sub-projects.
 add_subdirectory ("dbench_jumbf")
+
+enable_testing()
+add_subdirectory("dbench_jumbf_app")
