@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbXmlBox::DbXmlBox()
 	{
-		set_box_type(BoxType::XML);
+		set_box_type("xml "); // there must be a space 
 	}
 
 	DbXmlBox::~DbXmlBox()
@@ -19,7 +19,7 @@ namespace dbench {
 
 	void DbXmlBox::set_box(char* xml, uint64_t xml_size)
 	{
-		set_box_type(BoxType::XML);
+		set_box_type("xml ");
 		set_box_payload((unsigned char*)xml, xml_size);
 	}
 

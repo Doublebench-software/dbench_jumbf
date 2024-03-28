@@ -11,9 +11,6 @@ namespace dbench {
 		~DbJumbDescBox();
 
 	private:
-
-		JumbfContentType content_type_ = JumbfContentType::UNDEF;
-
 		// pointer to 16 bytes  type uuid
 		unsigned char type_uuid_[16]{ 0 };
 
@@ -46,21 +43,20 @@ namespace dbench {
 	protected:
 
 	public:
-		DbJumbDescBox(JumbfContentType content_type_in);
-		DbJumbDescBox(JumbfContentType content_type_in, std::string label);
-		DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID);
-		DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID, unsigned char* hash);
-		DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID, unsigned char* hash, DbBox* priv_box);
+		DbJumbDescBox(const unsigned char* content_type_in);
+		DbJumbDescBox(const unsigned char* content_type_in, std::string label);
+		DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID);
+		DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID, unsigned char* hash);
+		DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID, unsigned char* hash, DbBox* priv_box);
 
 
-		void set_box(JumbfContentType content_type_in, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box);
-		void set_box(unsigned char* typein, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box);
+		void set_box(const unsigned char* typein, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box);
 
 		void set_box_size(); // set lbox or xl_box 
 		// type_in = 16 byte JUMB Content Type
-		void set_content_type(JumbfContentType type);
-		JumbfContentType get_jumb_content_type();
-		void set_type_16bytes(unsigned char* type);
+		void set_content_type(const unsigned char* type);
+		unsigned char* get_jumb_content_type();
+		void set_type_16bytes(const unsigned char* type);
 		unsigned char* get_type_16bytes();
 
 		void set_toggles_byte(unsigned char byte);

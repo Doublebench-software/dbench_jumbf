@@ -64,51 +64,6 @@ string get_hash_as_str(unsigned char* hash) {
 	}
 	return str.str();
 }
-string get_box_type_str(dbench::BoxType type)
-{
-	switch (type)
-	{
-	case dbench::BoxType::JUMB:
-		return "jumb";
-		break;
-	case dbench::BoxType::JUMD:
-		return "jumd";
-		break;
-	case dbench::BoxType::JP2C:
-		return "jp2c";
-		break;
-	case dbench::BoxType::XML:
-		return "xml";
-		break;
-	case dbench::BoxType::JSON:
-		return "json";
-		break;
-	case dbench::BoxType::UUID:
-		return "uuid";
-		break;
-	case dbench::BoxType::BIDB:
-		return "bidb";
-		break;
-	case dbench::BoxType::BFDB:
-		return "bfdb";
-		break;
-	case dbench::BoxType::CBOR:
-		return "cbor";
-		break;
-	case dbench::BoxType::FREE:
-		return "free";
-		break;
-	case dbench::BoxType::PRIV:
-		return "priv";
-		break;
-	case dbench::BoxType::UNDEF:
-		return "undefined";
-		break;
-	default:
-		return "undefined";
-		break;
-	}
-}
 
 void print_on_screen(DbJumbBox jumb, CmdParams params);
 void parse_to_csv_file(DbJumbBox jumb, CmdParams params, string fname);
@@ -228,22 +183,23 @@ void print_on_screen(DbJumbBox jumb_box, CmdParams params) {
 
 	cout << "JUMBF Box." << endl;
 	cout << "   Lbox :                   [" << to_string(jumb_box.get_lbox()) << "]" << endl;
-	cout << "   Tbox :                   [0x" << jumb_box.get_tbox() << "]   [" << get_box_type_str(jumb_box.get_box_type()) << "]" << endl;
+	cout << "   Tbox :                   [0x" << jumb_box.get_tbox() << "]   [" << jumb_box.get_box_type_str() << "]" << endl;
 	if (jumb_box.is_xl_box_present()) {
 		cout << "   XLbox :                  [" << jumb_box.get_xl_box() << "]" << endl;
 	}
 
 	cout << "   JUMBF Description Box." << endl;
 	cout << "      Lbox :                [" << to_string(jumb_box.desc_box_.get_lbox()) << "]" << endl;
-	cout << "      Tbox :                [0x" << hex << jumb_box.desc_box_.get_tbox() << dec << "]   [" << get_box_type_str(jumb_box.desc_box_.get_box_type()) << "]" << endl;
+	cout << "      Tbox :                [0x" << hex << jumb_box.desc_box_.get_tbox() << dec << "]   [" << jumb_box.desc_box_.get_box_type_str() << "]" << endl;
 	if (jumb_box.desc_box_.is_xl_box_present()) {
 		cout << "      XLbox :                [" << jumb_box.desc_box_.get_xl_box() << "]" << endl;
 	}
 
 	cout << "      Content Type UUID :   [";
 	print_uuid_as_str(jumb_box.desc_box_.get_type_16bytes());
-	JumbfContentType jumb_content_type = jumb_box.desc_box_.get_jumb_content_type();
-	cout << "]   [" << get_jumbf_content_type_str(jumb_content_type) << "]" << endl;
+	unsigned char* jumb_content_type = jumb_box.desc_box_.get_jumb_content_type();
+	string jumbf_content_type_str = get_jumbf_content_type_str(jumb_content_type);
+	cout << "]   [" << jumbf_content_type_str << "]" << endl;
 
 	cout << "      Toogles Byte :        [0x" << setw(2) << setfill('0') << hex << int(jumb_box.desc_box_.get_toggles_byte()) << dec << "]" << endl;
 	cout << "      Is Requestable :      [" << (jumb_box.desc_box_.is_requestable() ? "TRUE" : "FALSE") << "]" << endl;
@@ -262,7 +218,7 @@ void print_on_screen(DbJumbBox jumb_box, CmdParams params) {
 	if (private_field) {
 		DbBox* private_box = jumb_box.desc_box_.get_private_box();
 		cout << "        Lbox :              [" << private_box->get_lbox() << "]" << endl;
-		cout << "        Tbox :              [0x" << hex << private_box->get_tbox() << dec << "]   [" << get_box_type_str(private_box->get_box_type()) << "]" << endl;
+		cout << "        Tbox :              [0x" << hex << private_box->get_tbox() << dec << "]   [" << private_box->get_box_type_str() << "]" << endl;
 		if (private_box->is_xl_box_present()) {
 			cout << "        XLbox :              [" << private_box->get_xl_box() << "]" << endl;
 		}
@@ -277,17 +233,17 @@ void print_on_screen(DbJumbBox jumb_box, CmdParams params) {
 
 		cout << "     Content Box No :       [" << ++no << "]" << endl;
 		cout << "      Lbox :                [" << box.get_lbox() << "]" << endl;
-		cout << "      Tbox :                [0x" << hex << box.get_tbox() << dec << "   [" << get_box_type_str(box.get_box_type()) << "]" << endl;
+		cout << "      Tbox :                [0x" << hex << box.get_tbox() << dec << "   [" << box.get_box_type_str() << "]" << endl;
 		if (box.is_xl_box_present()) {
 			cout << "      XLbox :                  [" << box.get_xl_box() << "]" << endl;
 		}
 		cout << "      Payload Data Size     [" << box.get_payload_size() << "]" << endl;
-		if (jumb_content_type == JumbfContentType::UUID) {
+		if (jumbf_content_type_str == "UUID") {
 			cout << "     Content Data UUID         [";
 			print_uuid_as_str(box.get_payload());
 			cout << "]" << endl;
 		}
-		if (jumb_content_type == JumbfContentType::EMBEDDED_File && box.get_box_type() == BoxType::BFDB) {
+		if (jumbf_content_type_str == "EMBEDDED FILE" && box.get_tbox() == dbench::box_type_bfdb) {
 			string embedd_file_toggle_str;
 			string media_type_str = "NULL";
 			string embedded_file_name_str = "NOT PRESENT";
@@ -320,7 +276,7 @@ void print_on_screen(DbJumbBox jumb_box, CmdParams params) {
 	cout << "      Padding  Box  :       [" << (padding_box_present ? "PRESENT" : "NOT PRESENT") << "]" << endl;
 	if (padding_box_present) {
 		cout << "      Lbox :                [" << jumb_box.padding_box_.get_lbox() << "]" << endl;
-		cout << "      Tbox :                [0x" << hex << jumb_box.padding_box_.get_tbox() << dec << "]   [" << get_box_type_str(jumb_box.desc_box_.get_box_type()) << "]" << endl;
+		cout << "      Tbox :                [0x" << hex << jumb_box.padding_box_.get_tbox() << dec << "]   [" << jumb_box.desc_box_.get_box_type_str() << "]" << endl;
 		if (jumb_box.padding_box_.is_xl_box_present()) {
 			cout << "      XLbox :                [" << jumb_box.padding_box_.get_xl_box() << "]" << endl;
 		}
@@ -373,8 +329,9 @@ void parse_to_csv_file(DbJumbBox jumb_box, CmdParams params, string fname) {
 
 	// Column L => UUID box UUID field
 	DbBox content_box = jumb_box.content_boxes_.front();
-
-	if (jumb_box.desc_box_.get_jumb_content_type() == JumbfContentType::UUID) {
+	unsigned char* jumbf_content_type = jumb_box.desc_box_.get_jumb_content_type();
+	string jumbf_content_type_str = get_jumbf_content_type_str(jumbf_content_type);
+	if (jumbf_content_type_str == "UUID") {
 		string uuid_str = get_uuid_as_str(content_box.get_payload());
 		csv_row.push_back(toUpper(uuid_str));
 	}
@@ -388,7 +345,7 @@ void parse_to_csv_file(DbJumbBox jumb_box, CmdParams params, string fname) {
 	string content_tbox_str = "NULL";
 	string content_box_size_str = "";
 
-	if (jumb_box.desc_box_.get_jumb_content_type() == JumbfContentType::EMBEDDED_File) {
+	if (jumbf_content_type_str == "EMBEDDED FILE") {
 		content_box = jumb_box.content_boxes_.front();
 
 		unsigned char* buf = content_box.get_payload() - 8;
@@ -407,13 +364,13 @@ void parse_to_csv_file(DbJumbBox jumb_box, CmdParams params, string fname) {
 		else
 			embeddd_external_str = "FALSE";
 		DbBox box = jumb_box.content_boxes_.back();
-		if (box.get_box_type() == BoxType::BIDB) {
+		if (box.get_tbox() ==box_type_bidb) {
 			content_tbox_str = "bidb";
 			content_box_size_str = to_string(box.get_box_size());
 		}
 	}
 	else {
-		content_tbox_str = get_box_type_str(content_box.get_box_type());
+		content_tbox_str = content_box.get_box_type_str();
 		content_box_size_str = to_string(content_box.get_box_size());
 	}
 	csv_row.push_back(embedd_file_toggle_str);

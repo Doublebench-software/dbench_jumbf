@@ -90,7 +90,8 @@ int db_perform_encoding(CmdParams args)
 
 	// make Jumb Description box
 	DbJumbDescBox desc_box;
-	desc_box.set_box(args.jumbf_content_type, args.is_requestable, args.label, args.id_present, args.id, args.hash, priv_box);
+	unsigned char* type_uuid = db_get_jumbf_content_type_uuid(args.jumbf_content_type);
+	desc_box.set_box(type_uuid, args.is_requestable, args.label, args.id_present, args.id, args.hash, priv_box);
 
 	//unsigned char* jumd_buf{ nullptr };
 	//uint64_t jmd_size{ 0 };
@@ -112,7 +113,7 @@ int db_perform_encoding(CmdParams args)
 	uint64_t jumbf_buf_size{ 0 };
 
 	// make JUMBF and get serialized data.
-	if (args.jumbf_content_type == JumbfContentType::CODESTREAM) {
+	if (args.jumbf_content_type == "CODESTREAM") {
 		DbCodestreamBox codestream_box;
 		unsigned char* codestream_payload{ nullptr };
 		uint64_t payload_size{ 0 };
@@ -125,7 +126,7 @@ int db_perform_encoding(CmdParams args)
 		codestream_jumb.serialize(&jumbf_buf, &jumbf_buf_size);
 		delete[] codestream_payload;
 	}
-	else if (args.jumbf_content_type == JumbfContentType::XML) {
+	else if (args.jumbf_content_type == "XML") {
 		unsigned char* xml_data = nullptr;
 		uint64_t xml_size = 0;
 		db_read_file_bitstream(args.xml_file, &xml_data, &xml_size);
@@ -138,7 +139,7 @@ int db_perform_encoding(CmdParams args)
 		xml_jumbf_box.serialize(&jumbf_buf, &jumbf_buf_size);
 		delete[] xml_data;
 	}
-	else if (args.jumbf_content_type == JumbfContentType::JSON) {
+	else if (args.jumbf_content_type == "JSON") {
 		unsigned char* json_data = nullptr;
 		uint64_t json_size = 0;
 		db_read_file_bitstream(args.json_file, &json_data, &json_size);
@@ -151,7 +152,7 @@ int db_perform_encoding(CmdParams args)
 		json_jumbf_box.serialize(&jumbf_buf, &jumbf_buf_size);
 		delete[] json_data;
 	}
-	else if (args.jumbf_content_type == JumbfContentType::UUID) {
+	else if (args.jumbf_content_type == "UUID") {
 		unsigned char* uuid_paylaod_data = nullptr;
 		uint64_t uuid_paylaod_size = 0;
 		db_read_file_bitstream(args.uuid_data_file, &uuid_paylaod_data, &uuid_paylaod_size);
@@ -164,7 +165,7 @@ int db_perform_encoding(CmdParams args)
 		uuid_jumbf_box.serialize(&jumbf_buf, &jumbf_buf_size);
 		delete[] uuid_paylaod_data;
 	}
-	else if (args.jumbf_content_type == JumbfContentType::EMBEDDED_File) {
+	else if (args.jumbf_content_type == "EMBEDDED FILE") {
 		// first make file description box
 		DbFileDescBox file_desc_box(args.media_type, args.file_name, args.reference_external);
 
@@ -183,7 +184,7 @@ int db_perform_encoding(CmdParams args)
 		embd_file_jumb_box.serialize(&jumbf_buf, &jumbf_buf_size);
 		delete[] bfdb_paylaod_data;
 	}
-	else if (args.jumbf_content_type == JumbfContentType::CBOR) {
+	else if (args.jumbf_content_type == "CBOR") {
 		unsigned char* cbor_data = nullptr;
 		uint64_t cbor_size = 0;
 		db_read_file_bitstream(args.cbor_data_file, &cbor_data, &cbor_size);

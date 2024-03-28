@@ -114,45 +114,69 @@ void reset_enc_params(CmdParams* enc_params)
 	enc_params->external_link = "";
 	enc_params->cbor_data_file = "";
 	enc_params->output_file = "";
-	enc_params->jumbf_content_type = dbench::JumbfContentType::UNDEF;
-	enc_params->content_box_type = dbench::BoxType::UNDEF;
+	enc_params->jumbf_content_type = "UNKNOWN";
+	enc_params->content_box_type = "";
 	enc_params->no_of_content_box = 1;
 	enc_params->free_bytes = 0;
 	enc_params->Lbox = "NULL";
 }
-string get_jumbf_content_type_str(dbench::JumbfContentType type) {
-	switch (type)
-	{
-	case dbench::JumbfContentType::CODESTREAM:
-		return "CODESTREAM";
-		break;
-	case dbench::JumbfContentType::XML:
-		return "XML";
-		break;
-	case dbench::JumbfContentType::JSON:
-		return "JSON";
-		break;
-	case dbench::JumbfContentType::UUID:
-		return "UUID";
-		break;
-	case dbench::JumbfContentType::EMBEDDED_File:
-		return "EMBEDDED FILE";
-		break;
-	case dbench::JumbfContentType::CBOR:
-		return "CBOR";
-		break;
-	case dbench::JumbfContentType::JPEG360:
-		return "JPEG 360";
-		break;
-	case dbench::JumbfContentType::UNDEF:
-		return "UNKNOWN";
-		break;
-	default:
-		return "UNKNOWN";
-		break;
+string get_jumbf_content_type_str(const unsigned char* type) {
+	string str = "UNKNOWN";
+	if (memcmp(type, dbench::jumbf_type_contiguous_codestream, 16) == 0) {
+		str = "CODESTREAM";
 	}
+	if (memcmp(type, dbench::jumbf_type_cbor, 16) == 0) {
+		str = "CBOR";
+	}
+	if (memcmp(type, dbench::jumbf_type_embedded_file, 16) == 0) {
+		str = "EMBEDDED FILE";
+	}
+	if (memcmp(type, dbench::jumbf_type_json, 16) == 0) {
+		str = "JSON";
+	}
+	if (memcmp(type, dbench::jumbf_type_uuid, 16) == 0) {
+		str = "UUID";
+	}
+	if (memcmp(type, dbench::jumbf_type_xml, 16) == 0) {
+		str = "XML";
+	}
+	return str;
 }
+unsigned char* db_get_jumbf_content_type_uuid(string type) {
+	unsigned char* jumb_content_type_uuid = nullptr;
 
+	if (type == "CODESTREAM") {
+		jumb_content_type_uuid = new unsigned char[16];
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_contiguous_codestream[i];
+	}
+	else if (type == "XML") {
+		jumb_content_type_uuid = new unsigned char[16];
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_xml[i];
+	}
+	else if (type == "JSON") {
+		jumb_content_type_uuid = new unsigned char[16];
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_json[i];
+	}
+	else if (type == "UUID") {
+		jumb_content_type_uuid = new unsigned char[16];
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_uuid[i];
+	}
+	else if (type == "EMBEDDED FILE") {
+		jumb_content_type_uuid = new unsigned char[16];
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_embedded_file[i];
+	}
+	else if (type == "CBOR") {
+		jumb_content_type_uuid = new unsigned char[16]; 
+		for (auto i = 0; i < 16; i++)
+			jumb_content_type_uuid[i] = dbench::jumbf_type_cbor[i];
+	}
+	return jumb_content_type_uuid;
+}
 void print_uuid_as_str(unsigned char* uuid) {
 	for (auto i = 0; i < 16; i++) {
 		if (i == 4 || i == 6 || i == 8 || i == 10)
@@ -191,13 +215,13 @@ void print_enc_params(CmdParams* enc_params)
 
 	cout << "   JUMBF Description Box Configuration" << endl;
 
-	dbench::JumbfContentType type = enc_params->jumbf_content_type;
-	unsigned char* uuid = dbench::db_get_jumbf_content_type_uuid(enc_params->jumbf_content_type);
+	string type = enc_params->jumbf_content_type;
+	unsigned char* uuid = db_get_jumbf_content_type_uuid(enc_params->jumbf_content_type);
 
 	cout << "\tJUMBF Content Type UUID : [";
 	print_uuid_as_str(uuid);
 	cout << "]";
-	cout << "\t[" << get_jumbf_content_type_str(type) << "]" << endl;
+	cout << "\t[" << type << "]" << endl;
 	string requestable = enc_params->is_requestable ? "TRUE" : "FALSE";
 	cout << "\tIs Requestable :          [" << requestable << "]" << endl;
 
@@ -232,24 +256,22 @@ void print_enc_params(CmdParams* enc_params)
 
 	cout << "   JUMBF Content Boxes Configuration" << endl;
 
-	switch (type)
-	{
-	case dbench::JumbfContentType::CODESTREAM:
+	if (type == "CODESTREAM") {
 		cout << "\t   Codestream File :      [" << enc_params->codestream_file << "]" << endl;
-		break;
-	case dbench::JumbfContentType::XML:
+	}
+	else if (type == "XML") {
 		cout << "\t   XML Data File :        [" << enc_params->xml_file << "]" << endl;
-		break;
-	case dbench::JumbfContentType::JSON:
+	}
+	else if (type == "JSON") {
 		cout << "\t   JSON Data File :       [" << enc_params->json_file << "]" << endl;
-		break;
-	case dbench::JumbfContentType::UUID:
+	}
+	else if (type == "UUID") {
 		cout << "\t   Content Data UUID :    [";
 		print_uuid_as_str(enc_params->uuid);
 		cout << "]" << endl;
 		cout << "\t   UUID Data File :       [" << enc_params->uuid_data_file << "]" << endl;
-		break;
-	case dbench::JumbfContentType::EMBEDDED_File:
+	}
+	else if (type == "EMBEDDED FILE") {
 		cout << "\t   Media Type :           [" << enc_params->media_type << "]" << endl;
 		cout << "\t   Embedded File :        [" << enc_params->embed_file << "]" << endl;
 		if (enc_params->embed_file_name) {
@@ -264,16 +286,9 @@ void print_enc_params(CmdParams* enc_params)
 		else {
 			cout << "\t   Referenced Externally: [NO]" << endl;
 		}
-		break;
-	case dbench::JumbfContentType::CBOR:
+	}
+	else if (type == "CBOR") {
 		cout << "\t   CBOR Data File :        [" << enc_params->cbor_data_file << "]" << endl;
-		break;
-	case dbench::JumbfContentType::JPEG360:
-		break;
-	case dbench::JumbfContentType::UNDEF:
-		break;
-	default:
-		break;
 	}
 	if (enc_params->free_bytes != 0) {
 		cout << "\tPadding Box :             [PRESENT]" << endl;
@@ -312,7 +327,6 @@ FileExtension get_file_extension(string file) {
 	else
 		return FileExtension::UNKNOWN;
 }
-dbench::JumbfContentType  recognise_content_type(string type_str);
 
 std::string extract_file_name(const std::string& full_path) {
 	size_t last_slash_index = full_path.find_last_of("/\\");
@@ -433,25 +447,25 @@ void parse_enc_params(int argc, const char* argv[], CmdParams* enc_params)
 		}
 		else if (arg == opt_codestream_file) {
 			enc_params->codestream_file = argv[i];
-			enc_params->jumbf_content_type = dbench::JumbfContentType::CODESTREAM;
-			enc_params->content_box_type = dbench::BoxType::JP2C;
+			enc_params->jumbf_content_type = "CODESTREAM";
+			enc_params->content_box_type = "jp2c";
 		}
 		else if (arg == opt_xml_file) {
 			enc_params->xml_file = argv[i];
-			enc_params->jumbf_content_type = dbench::JumbfContentType::XML;
-			enc_params->content_box_type = dbench::BoxType::XML;
+			enc_params->jumbf_content_type = "XML";
+			enc_params->content_box_type = "xml "; 
 			enc_params->content_data_file_ext = FileExtension::XML;
 		}
 		else if (arg == opt_json_file) {
 			enc_params->json_file = argv[i];
-			enc_params->jumbf_content_type = dbench::JumbfContentType::JSON;
-			enc_params->content_box_type = dbench::BoxType::JSON;
+			enc_params->jumbf_content_type = "JSON";
+			enc_params->content_box_type = "json";
 			enc_params->content_data_file_ext = FileExtension::JSON;
 		}
 		else if (arg == opt_uuid_data_file) {
 			enc_params->uuid_data_file = argv[i];
-			enc_params->jumbf_content_type = dbench::JumbfContentType::UUID;
-			enc_params->content_box_type = dbench::BoxType::UUID;
+			enc_params->jumbf_content_type = "UUID";
+			enc_params->content_box_type = "uuid";
 		}
 		else if (arg == opt_uuid) {
 			string uuid_str = argv[i];
@@ -473,14 +487,14 @@ void parse_enc_params(int argc, const char* argv[], CmdParams* enc_params)
 		else if (arg == opt_embed_file) {
 			string embed_file_full = argv[i];
 			enc_params->embed_file = embed_file_full;
-			enc_params->jumbf_content_type = dbench::JumbfContentType::EMBEDDED_File;
+			enc_params->jumbf_content_type = "EMBEDDED FILE";
 		}
 		else if (arg == opt_embed_filename) {
 			enc_params->embed_file_name = true;
 		}
 		else if (arg == opt_cbor_data) {
 			enc_params->cbor_data_file = argv[i];
-			enc_params->jumbf_content_type = dbench::JumbfContentType::CBOR;
+			enc_params->jumbf_content_type = "CBOR";
 			enc_params->content_data_file_ext = get_file_extension(argv[i]);
 		}
 		else if (arg == opt_media_type)
@@ -491,7 +505,7 @@ void parse_enc_params(int argc, const char* argv[], CmdParams* enc_params)
 		}
 		else if (arg == opt_content_type) {
 			string type_str = argv[i];
-			enc_params->jumbf_content_type = recognise_content_type(type_str);
+			enc_params->jumbf_content_type = type_str;
 		}
 		else if (arg == opt_free_bytes) {
 			enc_params->free_bytes = stoi(argv[i]);
@@ -557,7 +571,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "Codestream File : \"" << params->codestream_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::CODESTREAM) {
+		if (params->jumbf_content_type != "CODESTREAM") {
 			std::cout << "JUMBF Content Type should be set to JP2C." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -582,7 +596,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "XML File : \"" << params->xml_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::XML) {
+		if (params->jumbf_content_type != "XML") {
 			std::cout << "JUMBF Content Type should be set to XML." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -595,7 +609,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "JSON File : \"" << params->json_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::JSON) {
+		if (params->jumbf_content_type != "JSON") {
 			std::cout << "JUMBF Content Type should be set to JSON." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -608,7 +622,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "UUID Data File : \"" << params->uuid_data_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::UUID) {
+		if (params->jumbf_content_type != "UUID") {
 			std::cout << "JUMBF Content Type should be set to UUID." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -621,7 +635,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "File to embed : \"" << params->embed_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::EMBEDDED_File) {
+		if (params->jumbf_content_type != "EMBEDDED FILE") {
 			std::cout << "JUMBF Content Type should be set to EMBEDDED_FILE." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -634,7 +648,7 @@ void sanitize_enc_params(CmdParams* params)
 			std::cout << "CBOR File : \"" << params->cbor_data_file << "\" does not exist." << std::endl;
 			exit(EXIT_FAILURE);
 		}
-		if (params->jumbf_content_type != dbench::JumbfContentType::CBOR) {
+		if (params->jumbf_content_type != "CBOR") {
 			std::cout << "JUMBF Content Type should be set to CBOR." << std::endl;
 			exit(EXIT_FAILURE);
 		}
@@ -659,7 +673,7 @@ void sanitize_enc_params(CmdParams* params)
 		uint32_t lbox = dbench::db_get_4byte(&params->private_field_data);
 		uint32_t tbox = dbench::db_get_4byte(&params->private_field_data);
 		params->private_field_data -= 8;
-		if (tbox != uint32_t(dbench::BoxType::PRIV)) {
+		if (tbox != dbench::box_type_priv) {
 			std::cout << "Private Field data should have Tbox = PRIV." << std::endl;
 			delete[] params->private_field_data;
 			exit(EXIT_FAILURE);
@@ -677,7 +691,7 @@ void sanitize_enc_params(CmdParams* params)
 		}
 	}
 
-	if (params->jumbf_content_type == dbench::JumbfContentType::EMBEDDED_File) {
+	if (params->jumbf_content_type == "EMBEDDED FILE") {
 		if (params->media_type.empty()) {
 			std::cout << "Media Type should be provided." << std::endl;
 			exit(EXIT_FAILURE);
@@ -694,7 +708,7 @@ void sanitize_enc_params(CmdParams* params)
 		}
 	}
 
-	if (params->jumbf_content_type == dbench::JumbfContentType::UUID) {
+	if (params->jumbf_content_type == "UUID") {
 		if (params->uuid == nullptr) {
 			std::cout << "16 bytes UUID should be provided." << std::endl;
 			exit(EXIT_FAILURE);
@@ -740,29 +754,12 @@ void sanitize_parsing_params(CmdParams* params) {
 
 }
 
-dbench::JumbfContentType  recognise_content_type(string type_str) {
-	string type_str_l = type_str;
-	std::transform(type_str_l.begin(), type_str_l.end(), type_str_l.begin(), [](unsigned char c) { return std::tolower(c); });
-	if (type_str_l == "xml")
-		return dbench::JumbfContentType::XML;
-	else if (type_str_l == "json")
-		return dbench::JumbfContentType::JSON;
-	else if (type_str_l == "cbor")
-		return dbench::JumbfContentType::CBOR;
-	else if (type_str_l == "embedded_file" || type_str_l == "embedded file")
-		return dbench::JumbfContentType::EMBEDDED_File;
-	else if (type_str_l == "jp2c")
-		return dbench::JumbfContentType::CODESTREAM;
-	else if (type_str_l == "uuid")
-		return dbench::JumbfContentType::UUID;
-	else
-		return dbench::JumbfContentType::UNDEF;
-}
+
 void parse_csv_row_to_enc_params(vector<string> row, CmdParams* enc_params) {
 
 	string value = row[1];
 	// Column B
-	enc_params->jumbf_content_type = recognise_content_type(value);
+	enc_params->jumbf_content_type = value;
 
 	// Column C
 	value = row[2];
@@ -825,22 +822,22 @@ void parse_csv_row_to_enc_params(vector<string> row, CmdParams* enc_params) {
 
 	// Column M
 	value = row[12];
-	if (enc_params->jumbf_content_type == dbench::JumbfContentType::XML) {
+	if (enc_params->jumbf_content_type == "XML") {
 		enc_params->xml_file = value;
 	}
-	else if (enc_params->jumbf_content_type == dbench::JumbfContentType::JSON) {
+	else if (enc_params->jumbf_content_type == "JSON") {
 		enc_params->json_file = value;
 	}
-	else if (enc_params->jumbf_content_type == dbench::JumbfContentType::UUID) {
+	else if (enc_params->jumbf_content_type == "UUID") {
 		enc_params->uuid_data_file = value;
 	}
-	else if (enc_params->jumbf_content_type == dbench::JumbfContentType::EMBEDDED_File) {
+	else if (enc_params->jumbf_content_type == "EMBEDDED FILE") {
 		enc_params->embed_file = value;
 	}
-	else if (enc_params->jumbf_content_type == dbench::JumbfContentType::CODESTREAM) {
+	else if (enc_params->jumbf_content_type == "CODESTREAM") {
 		enc_params->codestream_file = value;
 	}
-	else if (enc_params->jumbf_content_type == dbench::JumbfContentType::CBOR) {
+	else if (enc_params->jumbf_content_type == "CBOR") {
 		enc_params->cbor_data_file = value;
 	}
 

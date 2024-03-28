@@ -99,157 +99,163 @@ namespace dbench {
 		return val1 + val2;
 	}
 
-	unsigned char* db_get_jumbf_content_type_uuid(JumbfContentType type) {
+	unsigned char* db_get_jumbf_content_type_uuid(std::string type) {
 		unsigned char* jumb_content_type_uuid = nullptr;
-		//if (type == JumbfContentType::JPEG360)
-		//{
-		//	jumb_content_type_uuid = new unsigned char[16];
-		//	unsigned char type_jpeg360[16] = { 0x78, 0x5F, 0x34, 0xB7, 0x5D, 0x4B, 0x47, 0x4C, 0xB8, 0x9F, 0x1D, 0x99, 0xE0, 0xE3, 0xA8, 0xDD };
-		//	for (auto i = 0; i < 16; i++)
-		//		jumb_content_type_uuid[i] = type_jpeg360[i];
-		//}
-		// else 
-		if (type == JumbfContentType::CODESTREAM) {
+		if (type == "CODESTREAM") {
 			jumb_content_type_uuid = new unsigned char[16];
-			unsigned char contiguous_codestream_type_uuid[16] = { 0x65, 0x79, 0xD6, 0xFB, 0xDB, 0xA2, 0x44, 0x6B, 0xB2, 0xAC, 0x1B, 0x82, 0xFE, 0xEB, 0x89, 0xD1 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = contiguous_codestream_type_uuid[i];
+				jumb_content_type_uuid[i] = jumbf_type_contiguous_codestream[i];
 		}
-		else if (type == JumbfContentType::XML) {
+		else if (type == "XML") {
 			jumb_content_type_uuid = new unsigned char[16];
-			unsigned char xml_content_type[16] = { 0x78, 0x6D, 0x6C, 0x20, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = xml_content_type[i];
+				jumb_content_type_uuid[i] = jumbf_type_xml[i];
 		}
-		else if (type == JumbfContentType::JSON) {
+		else if (type == "JSON") {
 			jumb_content_type_uuid = new unsigned char[16];
-			unsigned char json_content_type[16] = { 0x6A, 0x73, 0x6F, 0x6E, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = json_content_type[i];
+				jumb_content_type_uuid[i] = jumbf_type_json[i];
 		}
-		else if (type == JumbfContentType::UUID) {
+		else if (type == "UUID") {
 			jumb_content_type_uuid = new unsigned char[16];
-			unsigned char uuid_content_type[16] = { 0x75, 0x75, 0x69, 0x64, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = uuid_content_type[i];
+				jumb_content_type_uuid[i] = jumbf_type_uuid[i];
 		}
-		//else if (type == JumbfContentType::JPEGSnack) {
-		//	jumb_content_type_uuid = new unsigned char[16];
-		//	unsigned char uuid_content_type[16] = { 0x16, 0xAD, 0x91, 0xE0, 0xA3, 0x7F, 0x11, 0xEB, 0x9D, 0x0D, 0x08, 0x00, 0x20, 0x0C, 0x9A, 0x66 };
-		//	for (auto i = 0; i < 16; i++)
-		//		jumb_content_type_uuid[i] = uuid_content_type[i];
-		//}
-		else if (type == JumbfContentType::EMBEDDED_File) {
+		else if (type == "EMBEDDED FILE") {
 			jumb_content_type_uuid = new unsigned char[16]; // 0x40CB0C32-BB8A-489D-A70B-2AD6F47F4369
-			unsigned char uuid_content_type[16] = { 0x40, 0xCB, 0x0C, 0x32, 0xBB, 0x8A, 0x48, 0x9D, 0xA7, 0x0B, 0x2A, 0xD6, 0xF4, 0x7F, 0x43, 0x69 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = uuid_content_type[i];
+				jumb_content_type_uuid[i] = jumbf_type_embedded_file[i];
 		}
-		else if (type == JumbfContentType::CBOR) {
+		else if (type == "CBOR") {
 			jumb_content_type_uuid = new unsigned char[16]; // 0x63626F72-0011-0010-8000-00AA00389B71
-			unsigned char uuid_content_type[16] = { 0x63, 0x62, 0x6F, 0x72, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = uuid_content_type[i];
+				jumb_content_type_uuid[i] = jumbf_type_cbor[i];
 		}
 		return jumb_content_type_uuid;
 	}
 
-	JumbfContentType db_identify_jumbf_content_type(unsigned char* type_16b)
+	//JumbfContentType db_identify_jumbf_content_type(unsigned char* type_16b)
+	//{
+	//	unsigned char* orig = nullptr;
+
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::CODESTREAM);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::CODESTREAM;
+	//	}
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::XML);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::XML;
+	//	}
+
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::JSON);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::JSON;
+	//	}
+
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::UUID);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::UUID;
+	//	}
+
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::EMBEDDED_File);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::EMBEDDED_File;
+	//	}
+
+	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::CBOR);
+	//	if (memcmp(orig, type_16b, 16) == 0) {
+	//		delete[] orig;
+	//		return JumbfContentType::CBOR;
+	//	}
+
+	//	//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEG360);
+	//	//if (memcmp(orig, type_16b, 16) == 0) {
+	//	//	delete[] orig;
+	//	//	return JumbfContentType::JPEG360;
+	//	//}
+
+	//	//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEGSnack);
+	//	//if (memcmp(orig, type_16b, 16) == 0) {
+	//	//	delete[] orig;
+	//	//	return JumbfContentType::JPEGSnack;
+	//	//}
+	//	delete[] orig;
+	//	return JumbfContentType::UNDEF;
+	//}
+
+	//BoxType db_identify_box_type(uint32_t tbox)
+	//{
+	//	BoxType type = BoxType::UNDEF;
+	//	switch (tbox)
+	//	{
+	//	case 0x6a756d62:
+	//		type = BoxType::JUMB;
+	//		break;
+	//	case 0x6a756d64:
+	//		type = BoxType::JUMD;
+	//		break;
+	//	case 0X6A703263:
+	//		type = BoxType::JP2C;
+	//		break;
+	//	case 0X786D6C20:
+	//		type = BoxType::XML;
+	//		break;
+	//	case 0X6A736F6E:
+	//		type = BoxType::JSON;
+	//		break;
+	//	case 0X75756964:
+	//		type = BoxType::UUID;
+	//		break;
+	//	case 0x62696462:
+	//		type = BoxType::BIDB;
+	//		break;
+	//	case 0x62666462:
+	//		type = BoxType::BFDB;
+	//		break;
+	//	case 0x63626F72:
+	//		type = BoxType::CBOR;
+	//		break;
+	//	case 0x66726565:
+	//		type = BoxType::FREE;
+	//		break;
+	//	case 0x70726976:
+	//		type = BoxType::PRIV;
+	//		break;
+	//	default:
+	//		break;
+	//	}
+	//	return type;
+	//}
+
+	uint32_t box_type_str_to_uint32(std::string& type_str)
 	{
-		unsigned char* orig = nullptr;
-
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::CODESTREAM);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::CODESTREAM;
+		if (type_str.size() != 4) {
+			std::cerr << "Input string must be exactly 4 characters long." << std::endl;
+			return 0;
 		}
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::XML);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::XML;
-		}
-
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::JSON);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::JSON;
-		}
-
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::UUID);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::UUID;
-		}
-
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::EMBEDDED_File);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::EMBEDDED_File;
-		}
-
-		orig = db_get_jumbf_content_type_uuid(JumbfContentType::CBOR);
-		if (memcmp(orig, type_16b, 16) == 0) {
-			delete[] orig;
-			return JumbfContentType::CBOR;
-		}
-
-		//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEG360);
-		//if (memcmp(orig, type_16b, 16) == 0) {
-		//	delete[] orig;
-		//	return JumbfContentType::JPEG360;
-		//}
-
-		//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEGSnack);
-		//if (memcmp(orig, type_16b, 16) == 0) {
-		//	delete[] orig;
-		//	return JumbfContentType::JPEGSnack;
-		//}
-		delete[] orig;
-		return JumbfContentType::UNDEF;
+		uint32_t result;
+		std::memcpy(&result, type_str.data(), 4);
+		// Convert to little endian
+		result = ((result & 0xff000000) >> 24) |
+			((result & 0x00ff0000) >> 8) |
+			((result & 0x0000ff00) << 8) |
+			((result & 0x000000ff) << 24);
+		return result;
 	}
 
-	BoxType db_identify_box_type(uint32_t tbox)
-	{
-		BoxType type = BoxType::UNDEF;
-		switch (tbox)
-		{
-		case 0x6a756d62:
-			type = BoxType::JUMB;
-			break;
-		case 0x6a756d64:
-			type = BoxType::JUMD;
-			break;
-		case 0X6A703263:
-			type = BoxType::JP2C;
-			break;
-		case 0X786D6C20:
-			type = BoxType::XML;
-			break;
-		case 0X6A736F6E:
-			type = BoxType::JSON;
-			break;
-		case 0X75756964:
-			type = BoxType::UUID;
-			break;
-		case 0x62696462:
-			type = BoxType::BIDB;
-			break;
-		case 0x62666462:
-			type = BoxType::BFDB;
-			break;
-		case 0x63626F72:
-			type = BoxType::CBOR;
-			break;
-		case 0x66726565:
-			type = BoxType::FREE;
-			break;
-		case 0x70726976:
-			type = BoxType::PRIV;
-			break;
-		default:
-			break;
+
+	std::string uint32_to_ASCII(uint32_t input) {
+		std::string result;
+		for (int i = 0; i < 4; ++i) {
+			char c = static_cast<char>((input >> (8 * i)) & 0xFF);
+			result.insert(result.begin(), c);
 		}
-		return type;
+		return result;
 	}
 
 	int db_write_jumbf_buf_to_jpg_buf(unsigned char* jumbf_buf, uint64_t jumbf_size, unsigned char* input_jpg, uint64_t jpg_size, unsigned char** output_buf, uint64_t* output_buf_size)
@@ -317,7 +323,7 @@ namespace dbench {
 					uint32_t Z = db_get_4byte(&buf);
 					uint32_t Lbox = db_get_4byte(&buf);
 					uint32_t Tbox = db_get_4byte(&buf);
-					if (Tbox == uint32_t(0x6a756d62) && En == previous_jumb_en && Z == previous_jumb_z + 1) {
+					if (Tbox == uint32_t(box_type_jumb) && En == previous_jumb_en && Z == previous_jumb_z + 1) {
 						// it is same jumb
 						previous_jumb_z = Z;
 					}
@@ -382,7 +388,7 @@ namespace dbench {
 	}
 
 
-	int db_extract_jumbf_bitstream(unsigned char* in_jpg_buf, uint64_t in_jpg_size, JumbfContentType type, unsigned char** jumb_buf, uint32_t* jumb_buf_size)
+	int db_extract_jumbf_bitstream(unsigned char* in_jpg_buf, uint64_t in_jpg_size, const unsigned char* type, unsigned char** jumb_buf, uint32_t* jumb_buf_size)
 	{
 		if (in_jpg_buf == nullptr) {
 			return -1;
@@ -420,10 +426,9 @@ namespace dbench {
 				uint32_t this_Z = db_get_4byte(&data);
 				Lbox = db_get_4byte(&data);
 				uint32_t Tbox = db_get_4byte(&data);
-				if (Tbox == uint32_t(BoxType::JUMB) && this_Z == 1)
+				if (Tbox == uint32_t(box_type_jumb) && this_Z == 1)
 				{
-					JumbfContentType this_type = db_identify_jumbf_content_type(data + 8);
-					if (this_type == type) {
+					if (memcmp(type, (data + 8), 16) == 0) {
 						is_requested_jumbf = true;
 					}
 				}
@@ -536,7 +541,7 @@ namespace dbench {
 					box_length = Lbox;
 				this_app11_paylaod_size = len - this_app11_header_size - this_box_header_size;
 				next_marker = len - this_app11_header_size;
-				if (this_En != previous_En && Tbox == uint32_t(BoxType::JUMB)) { // New JUMBF
+				if (this_En != previous_En && Tbox == box_type_jumb) { // New JUMBF
 					//cout << "New JUMBF Detected. => Lbox : " << box_length << endl;
 					jumb_buf = new unsigned char[box_length];
 					jumbfs_vec.push_back(jumb_buf);
@@ -547,7 +552,7 @@ namespace dbench {
 					jumb_buf += (this_app11_paylaod_size + this_box_header_size);
 					data += (this_app11_paylaod_size + this_box_header_size);
 				}
-				else if (this_En == previous_En && Tbox == uint32_t(BoxType::JUMB) && this_Z == (previous_Z + 1))
+				else if (this_En == previous_En && Tbox == uint32_t(0x6a756d62) && this_Z == (previous_Z + 1))
 				{
 					//memcpy_s(jumb_buf, box_length, data, this_app11_paylaod_size);
 					memcpy(jumb_buf, data, this_app11_paylaod_size);

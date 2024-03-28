@@ -19,7 +19,7 @@ namespace dbench {
 		void insert_content_box(DbBox box_in);
 		void set_free_box(DbFreeBox free_box);
 		void set_box_size();
-		JumbfContentType get_jumb_content_type();
+		unsigned char* get_jumb_content_type();
 
 		void serialize(unsigned char** out_buf, uint64_t* out_buf_size);
 		void deserialize(unsigned char* in_box_buf, uint64_t in_buf_size);

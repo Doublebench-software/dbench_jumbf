@@ -6,7 +6,7 @@
 namespace dbench {
 	DbJsonJumbBox::DbJsonJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::JSON);
+		desc_box_.set_content_type(jumbf_type_json);
 		set_box_size();
 	}
 
@@ -17,26 +17,26 @@ namespace dbench {
 
 	DbJsonJumbBox::DbJsonJumbBox(DbJsonBox json_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::JSON);
+		desc_box_.set_content_type(jumbf_type_json);
 		json_content_box_ = json_box;
 		set_box_size();
 	}
 	DbJsonJumbBox::DbJsonJumbBox(DbJsonBox json_box, DbFreeBox pading_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::JSON);
+		desc_box_.set_content_type(jumbf_type_json);
 		json_content_box_ = json_box;
 		padding_box_ = pading_box;
 		set_box_size();
 	}
 	DbJsonJumbBox::DbJsonJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::JSON);
+		desc_box_.set_content_type(jumbf_type_json);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 	DbJsonJumbBox::DbJsonJumbBox(DbJumbDescBox desc_box, DbJsonBox json_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::JSON);
+		desc_box_.set_content_type(jumbf_type_json);
 		set_jumbf_description_box(desc_box);
 		json_content_box_ = json_box;
 		set_box_size();
@@ -48,7 +48,7 @@ namespace dbench {
 	}
 	void DbJsonJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::JSON, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_json, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 	void DbJsonJumbBox::set_box_size()

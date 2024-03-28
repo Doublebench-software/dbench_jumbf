@@ -4,7 +4,7 @@
 namespace dbench {
 	DbJumbDescBox::DbJumbDescBox()
 	{
-		set_box_type(BoxType::JUMD);
+		set_box_type("jumd");
 	}
 
 	DbJumbDescBox::~DbJumbDescBox()
@@ -42,9 +42,9 @@ namespace dbench {
 		}
 	}
 
-	JumbfContentType DbJumbDescBox::get_jumb_content_type()
+	unsigned char* DbJumbDescBox::get_jumb_content_type()
 	{
-		return content_type_;
+		return &type_uuid_[0];
 	}
 
 	void DbJumbDescBox::set_requestable_bit_ON()
@@ -68,40 +68,33 @@ namespace dbench {
 		toggles_ = toggles_ | 16; // OR with 0001 0000
 	}
 
-	DbJumbDescBox::DbJumbDescBox(JumbfContentType content_type_in)
+	DbJumbDescBox::DbJumbDescBox(const unsigned char* content_type_in)
 	{
 		set_box(content_type_in, false, "", false, 0, nullptr, nullptr);
 	}
 
-	DbJumbDescBox::DbJumbDescBox(JumbfContentType content_type_in, std::string label)
+	DbJumbDescBox::DbJumbDescBox(const unsigned char* content_type_in, std::string label)
 	{
 		set_box(content_type_in, false, label, false, 0, nullptr, nullptr);
 	}
 
-	DbJumbDescBox::DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID)
+	DbJumbDescBox::DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID)
 	{
 		set_box(content_type_in, false, label, true, ID, nullptr, nullptr);
 	}
 
-	DbJumbDescBox::DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID, unsigned char* hash)
+	DbJumbDescBox::DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID, unsigned char* hash)
 	{
 		set_box(content_type_in, false, label, true, ID, hash, nullptr);
 	}
 
-	DbJumbDescBox::DbJumbDescBox(JumbfContentType content_type_in, std::string label, uint32_t ID, unsigned char* hash, DbBox* priv_box)
+	DbJumbDescBox::DbJumbDescBox(const unsigned char* content_type_in, std::string label, uint32_t ID, unsigned char* hash, DbBox* priv_box)
 	{
 		set_box(content_type_in, false, label, true, ID, hash, priv_box);
 	}
 
-	void DbJumbDescBox::set_box(JumbfContentType content_type_in, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box)
-	{
-		unsigned char* type_id = db_get_jumbf_content_type_uuid(content_type_in);
-		set_content_type(content_type_in);
-		set_box(type_id, requestable, label, id_present, ID, hash, priv_box);
 
-	}
-
-	void DbJumbDescBox::set_box(unsigned char* typein, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box)
+	void DbJumbDescBox::set_box(const unsigned char* typein, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box)
 	{
 		set_type_16bytes(typein);
 		set_requestable(requestable);
@@ -113,14 +106,12 @@ namespace dbench {
 		set_box_size();
 	}
 
-	void DbJumbDescBox::set_content_type(JumbfContentType type)
+	void DbJumbDescBox::set_content_type(const unsigned char* type)
 	{
-		unsigned char* content_type_uuid = db_get_jumbf_content_type_uuid(type);
-		this->set_type_16bytes(content_type_uuid);
-		this->content_type_ = type;
+		this->set_type_16bytes(type);
 	}
 
-	void DbJumbDescBox::set_type_16bytes(unsigned char* type_ptr)
+	void DbJumbDescBox::set_type_16bytes(const unsigned char* type_ptr)
 	{
 		if (type_ptr == nullptr)
 		{
@@ -325,11 +316,11 @@ namespace dbench {
 
 		lbox_ = db_get_4byte(&buf);
 		tbox_ = db_get_4byte(&buf);
-		box_type_ = db_identify_box_type(tbox_);
-		if (box_type_ != BoxType::JUMD) {
+		if (tbox_ != box_type_jumd) {
 			throw std::runtime_error("Error: De-Serializing JUMD, input buffer is not JUMD buffer.");
 			return;
 		}
+		tbox_str_ = "jumd";
 		bytes_remaining -= 8;
 		if (lbox_ == 1) {
 			xl_box_ = db_get_8byte(&buf);
@@ -347,8 +338,6 @@ namespace dbench {
 		for (auto i = 0; i < 16; i++) {
 			type_uuid_[i] = db_get_byte(&buf);
 		}
-
-		content_type_ = db_identify_jumbf_content_type(type_uuid_);
 
 		bytes_remaining -= 16;
 		toggles_ = db_get_byte(&buf);

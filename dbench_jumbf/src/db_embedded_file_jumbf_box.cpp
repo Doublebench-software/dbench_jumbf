@@ -4,7 +4,7 @@ namespace dbench {
 
 	DbEmbdFileJumbBox::DbEmbdFileJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::EMBEDDED_File);
+		desc_box_.set_content_type(jumbf_type_embedded_file);
 		set_box_size();
 	}
 
@@ -15,7 +15,7 @@ namespace dbench {
 
 	DbEmbdFileJumbBox::DbEmbdFileJumbBox(DbFileDescBox file_desc_bx, DbBinaryDataBox binary_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::EMBEDDED_File);
+		desc_box_.set_content_type(jumbf_type_embedded_file);
 		file_desc_box_ = file_desc_bx;
 		binary_data_box_ = binary_box;
 		set_box_size();
@@ -23,14 +23,14 @@ namespace dbench {
 
 	DbEmbdFileJumbBox::DbEmbdFileJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::EMBEDDED_File);
+		desc_box_.set_content_type(jumbf_type_embedded_file);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 
 	DbEmbdFileJumbBox::DbEmbdFileJumbBox(DbJumbDescBox desc_box, DbFileDescBox file_desc_bx, DbBinaryDataBox binary_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::EMBEDDED_File);
+		desc_box_.set_content_type(jumbf_type_embedded_file);
 		set_jumbf_description_box(desc_box);
 		set_content_box(file_desc_bx, binary_box);
 		set_box_size();
@@ -45,7 +45,7 @@ namespace dbench {
 
 	void DbEmbdFileJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::EMBEDDED_File, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_embedded_file, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 

@@ -6,7 +6,7 @@
 namespace dbench {
 	DbUuidJumbBox::DbUuidJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::UUID);
+		desc_box_.set_content_type(jumbf_type_uuid);
 		set_box_size();
 	}
 
@@ -17,13 +17,13 @@ namespace dbench {
 
 	DbUuidJumbBox::DbUuidJumbBox(DbUuidBox uuid_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::UUID);
+		desc_box_.set_content_type(jumbf_type_uuid);
 		uuid_content_box_ = uuid_box;
 		set_box_size();
 	}
 	DbUuidJumbBox::DbUuidJumbBox(DbUuidBox uuid_box, DbFreeBox pading_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::UUID);
+		desc_box_.set_content_type(jumbf_type_uuid);
 		uuid_content_box_ = uuid_box;
 		padding_box_ = pading_box;
 		set_box_size();
@@ -31,13 +31,13 @@ namespace dbench {
 	}
 	DbUuidJumbBox::DbUuidJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::UUID);
+		desc_box_.set_content_type(jumbf_type_uuid);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 	DbUuidJumbBox::DbUuidJumbBox(DbJumbDescBox desc_box, DbUuidBox uuid_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::UUID);
+		desc_box_.set_content_type(jumbf_type_uuid);
 		set_jumbf_description_box(desc_box);
 		uuid_content_box_ = uuid_box;
 		set_box_size();
@@ -49,7 +49,7 @@ namespace dbench {
 	}
 	void DbUuidJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::UUID, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_uuid, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 	void DbUuidJumbBox::set_box_size()

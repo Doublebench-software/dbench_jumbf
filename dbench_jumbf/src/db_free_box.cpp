@@ -6,11 +6,11 @@
 namespace dbench {
 	DbFreeBox::DbFreeBox()
 	{
-		set_box_type(BoxType::FREE);
+		set_box_type("free");
 	}
 	DbFreeBox::DbFreeBox(uint64_t no_of_padding_bytes)
 	{
-		set_box_type(BoxType::FREE);
+		set_box_type("free");
 		set_box(no_of_padding_bytes);
 	}
 	DbFreeBox::~DbFreeBox()

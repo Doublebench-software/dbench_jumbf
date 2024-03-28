@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbBinaryDataBox::DbBinaryDataBox()
 	{
-		set_box_type(BoxType::BIDB);
+		set_box_type("bidb");
 	}
 
 	DbBinaryDataBox::~DbBinaryDataBox()
@@ -19,7 +19,7 @@ namespace dbench {
 
 	void DbBinaryDataBox::set_box(unsigned char* binary_data, uint64_t binary_data_size)
 	{
-		set_box_type(BoxType::BIDB);
+		set_box_type("bidb");
 		set_box_payload(binary_data, binary_data_size);
 	}
 

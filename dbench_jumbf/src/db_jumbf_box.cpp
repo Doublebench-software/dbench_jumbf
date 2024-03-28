@@ -5,7 +5,7 @@ namespace dbench {
 
 	dbench::DbJumbBox::DbJumbBox()
 	{
-		set_box_type(BoxType::JUMB);
+		set_box_type("jumb");
 		is_superbox_ = true;
 	}
 
@@ -17,7 +17,7 @@ namespace dbench {
 
 	DbJumbBox::DbJumbBox(DbJumbDescBox ds_box)
 	{
-		set_box_type(BoxType::JUMB);
+		set_box_type("jumb");
 		is_superbox_ = true;
 		set_jumbf_description_box(ds_box);
 		set_box_size();
@@ -25,7 +25,7 @@ namespace dbench {
 
 	DbJumbBox::DbJumbBox(DbJumbDescBox ds_box, DbFreeBox fre_box)
 	{
-		set_box_type(BoxType::JUMB);
+		set_box_type("jumb");
 		is_superbox_ = true;
 		set_jumbf_description_box(ds_box);
 		set_free_box(fre_box);
@@ -77,7 +77,7 @@ namespace dbench {
 		}
 	}
 
-	JumbfContentType DbJumbBox::get_jumb_content_type()
+	unsigned char* DbJumbBox::get_jumb_content_type()
 	{
 		return desc_box_.get_jumb_content_type();
 	}
@@ -146,11 +146,11 @@ namespace dbench {
 
 		lbox_ = db_get_4byte(&buf);
 		tbox_ = db_get_4byte(&buf);
-		box_type_ = db_identify_box_type(tbox_);
-		if (box_type_ != BoxType::JUMB) {
+		if (tbox_ != box_type_jumb) {
 			throw std::runtime_error("Error: De-Serializing JUMB, input buffer is not JUMB buffer.");
 			return;
 		}
+		tbox_str_ = "jumb";
 		bytes_remaining -= 8;
 		if (lbox_ == 1) {
 			xl_box_ = db_get_8byte(&buf);
@@ -178,7 +178,7 @@ namespace dbench {
 			box->deserialize(buf, bytes_remaining);
 			bytes_remaining -= box->get_box_size();
 			buf += box->get_box_size();
-			if (box->get_box_type() == BoxType::FREE) {
+			if (box->get_tbox() == box_type_free) {
 				uint64_t no_of_free_bytes{ 0 };
 				DbFreeBox* free_box = new DbFreeBox;
 				if (box->get_lbox() == 1) {

@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbJsonBox::DbJsonBox()
 	{
-		set_box_type(BoxType::JSON);
+		set_box_type("json");
 	}
 
 	DbJsonBox::~DbJsonBox()
@@ -19,7 +19,7 @@ namespace dbench {
 
 	void DbJsonBox::set_box(char* json, uint64_t json_size)
 	{
-		set_box_type(BoxType::JSON);
+		set_box_type("json");
 		set_box_payload((unsigned char*)json, json_size);
 	}
 }

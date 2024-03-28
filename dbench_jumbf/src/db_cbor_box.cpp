@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbCborBox::DbCborBox()
 	{
-		set_box_type(BoxType::CBOR);
+		set_box_type("cbor");
 	}
 
 	DbCborBox::~DbCborBox()
@@ -19,7 +19,7 @@ namespace dbench {
 
 	void DbCborBox::set_box(char* cbor, uint64_t cbor_size)
 	{
-		set_box_type(BoxType::CBOR);
+		set_box_type("cbor");
 		set_box_payload((unsigned char*)cbor, cbor_size);
 	}
 

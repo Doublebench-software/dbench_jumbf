@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbFileDescBox::DbFileDescBox()
 	{
-		set_box_type(BoxType::BFDB);
+		set_box_type("bdfd");
 	}
 
 	DbFileDescBox::~DbFileDescBox()
@@ -21,7 +21,7 @@ namespace dbench {
 
 	void DbFileDescBox::set_box(std::string media_type_v, std::string file_name_v, bool ext_ref)
 	{
-		this->set_box_type(BoxType::BFDB);
+		this->set_box_type("bdfd");
 		this->set_media_type(media_type_v);
 		this->set_file_name(file_name_v);
 		this->set_external_reference(ext_ref);
@@ -146,11 +146,11 @@ namespace dbench {
 		uint64_t header_size{ 8 };
 		lbox_ = db_get_4byte(&buf);
 		tbox_ = db_get_4byte(&buf);
-		box_type_ = db_identify_box_type(tbox_);
-		if (box_type_ != BoxType::BFDB) {
+		if (tbox_ != box_type_bfdb) {
 			throw std::runtime_error("Error: De-Serializing BFDB, input buffer is not BFDB buffer.");
 			return;
 		}
+		tbox_str_ = "bfdb";
 		if (lbox_ == 1) {
 			xl_box_ = db_get_8byte(&buf);
 			xl_box_present_ = true;

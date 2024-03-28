@@ -4,7 +4,7 @@
 namespace dbench {
 	DbXmlJumbBox::DbXmlJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::XML);
+		desc_box_.set_content_type(jumbf_type_xml);
 		set_box_size();
 	}
 
@@ -15,26 +15,26 @@ namespace dbench {
 
 	DbXmlJumbBox::DbXmlJumbBox(DbXmlBox xml_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::XML);
+		desc_box_.set_content_type(jumbf_type_xml);
 		xml_content_box_ = xml_box;
 		set_box_size();
 	}
 	DbXmlJumbBox::DbXmlJumbBox(DbXmlBox xml_box, DbFreeBox pading_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::XML);
+		desc_box_.set_content_type(jumbf_type_xml);
 		xml_content_box_ = xml_box;
 		padding_box_ = pading_box;
 		set_box_size();
 	}
 	DbXmlJumbBox::DbXmlJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::XML);
+		desc_box_.set_content_type(jumbf_type_xml);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 	DbXmlJumbBox::DbXmlJumbBox(DbJumbDescBox desc_box, DbXmlBox xml_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::XML);
+		desc_box_.set_content_type(jumbf_type_xml);
 		set_jumbf_description_box(desc_box);
 		xml_content_box_ = xml_box;
 		set_box_size();
@@ -46,7 +46,7 @@ namespace dbench {
 	}
 	void DbXmlJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::XML, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_xml, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 	void DbXmlJumbBox::set_box_size()

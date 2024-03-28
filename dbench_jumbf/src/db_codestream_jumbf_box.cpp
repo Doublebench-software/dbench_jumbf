@@ -6,7 +6,7 @@
 namespace dbench {
 	DbCodestreamJumbBox::DbCodestreamJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::CODESTREAM);
+		desc_box_.set_content_type(jumbf_type_contiguous_codestream);
 		set_box_size();
 	}
 
@@ -17,13 +17,13 @@ namespace dbench {
 
 	DbCodestreamJumbBox::DbCodestreamJumbBox(DbCodestreamBox codestream_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CODESTREAM);
+		desc_box_.set_content_type(jumbf_type_contiguous_codestream);
 		codestream_content_box_ = codestream_box;
 		set_box_size();
 	}
 	DbCodestreamJumbBox::DbCodestreamJumbBox(DbCodestreamBox codestream_box, DbFreeBox pading_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CODESTREAM);
+		desc_box_.set_content_type(jumbf_type_contiguous_codestream);
 		codestream_content_box_ = codestream_box;
 		padding_box_ = pading_box;
 
@@ -31,13 +31,13 @@ namespace dbench {
 	}
 	DbCodestreamJumbBox::DbCodestreamJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CODESTREAM);
+		desc_box_.set_content_type(jumbf_type_contiguous_codestream);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 	DbCodestreamJumbBox::DbCodestreamJumbBox(DbJumbDescBox desc_box, DbCodestreamBox codestream_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CODESTREAM);
+		desc_box_.set_content_type(jumbf_type_contiguous_codestream);
 		set_jumbf_description_box(desc_box);
 		codestream_content_box_ = codestream_box;
 		set_box_size();
@@ -49,7 +49,7 @@ namespace dbench {
 	}
 	void DbCodestreamJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::CODESTREAM, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_contiguous_codestream, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 	void DbCodestreamJumbBox::set_box_size()

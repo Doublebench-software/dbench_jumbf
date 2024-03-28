@@ -10,22 +10,23 @@ namespace dbench {
 
 	}
 
-	DbBox::DbBox(BoxType box_type_in)
+
+	DbBox::DbBox(std::string box_type_str)
 	{
-		set_box_type(box_type_in);
+		set_box_type(box_type_str);
 	}
 
-	DbBox::DbBox(BoxType box_type_in, unsigned char* paylaod_ptr, uint64_t payload_size)
+	DbBox::DbBox(std::string box_type_str, unsigned char* paylaod_ptr, uint64_t payload_size)
 	{
-		set_box_type(box_type_in);
+		set_box_type(box_type_str);
 		payload_ = paylaod_ptr;
 		payload_size_ = payload_size;
 		set_box_size();
 	}
 
-	void DbBox::set_box(BoxType box_type_in, unsigned char* paylaod_ptr, uint64_t payload_size)
+	void DbBox::set_box(std::string box_type_str, unsigned char* paylaod_ptr, uint64_t payload_size)
 	{
-		set_box_type(box_type_in);
+		set_box_type(box_type_str);
 		payload_ = paylaod_ptr;
 		payload_size_ = payload_size;
 		set_box_size();
@@ -62,24 +63,26 @@ namespace dbench {
 		return this->lbox_;
 	}
 
-	void DbBox::set_tbox(uint32_t type)
+	void DbBox::set_tbox(const uint32_t type)
 	{
 		this->tbox_ = type;
-		this->box_type_ = db_identify_box_type(type);
+		this->tbox_str_ = uint32_to_ASCII(type);
 	}
 	uint32_t DbBox::get_tbox()
 	{
 		return this->tbox_;
 	}
 
-	void DbBox::set_box_type(BoxType type)
+
+	void DbBox::set_box_type(std::string type)
 	{
-		this->box_type_ = type;
-		this->set_tbox(uint32_t(type));
+		this->set_tbox(box_type_str_to_uint32(type));
 	}
-	BoxType DbBox::get_box_type()
+
+
+	std::string DbBox::get_box_type_str()
 	{
-		return this->box_type_;
+		return uint32_to_ASCII(this->tbox_);
 	}
 
 
@@ -152,7 +155,7 @@ namespace dbench {
 		uint64_t header_size{ 8 };
 		lbox_ = db_get_4byte(&buf);
 		tbox_ = db_get_4byte(&buf);
-		box_type_ = db_identify_box_type(tbox_);
+		tbox_str_ = uint32_to_ASCII(tbox_);
 		if (lbox_ == 1) {
 			xl_box_ = db_get_8byte(&buf);
 			xl_box_present_ = true;

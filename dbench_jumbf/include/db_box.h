@@ -6,9 +6,9 @@ namespace dbench {
 	public:
 		DbBox();
 		~DbBox();
-		DbBox(BoxType box_type_in);
-		DbBox(BoxType box_type_in, unsigned char* paylaod_ptr, uint64_t payload_size);
-		void set_box(BoxType box_type_in, unsigned char* paylaod_ptr, uint64_t payload_size);
+		DbBox(std::string box_type_str);
+		DbBox(std::string box_type_str, unsigned char* paylaod_ptr, uint64_t payload_size);
+		void set_box(std::string box_type_str, unsigned char* paylaod_ptr, uint64_t payload_size);
 		void set_box(uint32_t box_type_in, unsigned char* paylaod_ptr, uint64_t payload_size);
 		void set_box_payload(unsigned char* paylaod_ptr, uint64_t paylaod_size);
 		void set_payload(unsigned char* paylaod_ptr);
@@ -19,11 +19,11 @@ namespace dbench {
 		void set_box_size();
 		uint64_t get_box_size();
 
-		void set_tbox(uint32_t);
+		void set_tbox(const uint32_t);
 		uint32_t get_tbox();
 
-		void set_box_type(BoxType type);
-		BoxType get_box_type();
+		void set_box_type(std::string type);
+		std::string get_box_type_str();
 
 		bool is_xl_box_present();
 		uint64_t get_xl_box();
@@ -36,8 +36,8 @@ namespace dbench {
 	protected:
 		uint32_t lbox_{ 0 };
 		uint32_t tbox_{ 0 };
+		std::string tbox_str_{ "" };
 		uint64_t box_size_{ 0 };
-		BoxType box_type_{ BoxType::UNDEF };
 		bool xl_box_present_{ false };
 		uint64_t xl_box_{ 0 };
 		bool is_superbox_{ false };

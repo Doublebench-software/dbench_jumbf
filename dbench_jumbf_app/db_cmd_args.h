@@ -122,8 +122,8 @@ struct CmdParams
 	string cbor_data_file;
 	string output_file{ "db_output.jumbf" };
 
-	dbench::JumbfContentType jumbf_content_type{ dbench::JumbfContentType::UNDEF };
-	dbench::BoxType content_box_type{ dbench::BoxType::UNDEF };
+	string jumbf_content_type{"UNKNOWN"};
+	std::string content_box_type{""};
 
 	uint64_t no_of_content_box{ 1 };
 
@@ -152,7 +152,8 @@ void reset_enc_params(CmdParams* enc_params);
 void print_uuid_as_str(unsigned char* uuid);
 void print_enc_params(CmdParams* enc_params);
 bool contains_directory(const string& path);
-string get_jumbf_content_type_str(dbench::JumbfContentType type);
+string get_jumbf_content_type_str(const unsigned char* type);
+unsigned char* get_jumbf_content_type_uuid(string type);
 std::string combineFilePathAndFileName(const std::string& filePath, const std::string& fileName);
 int countRowsInCSV(const std::string& filePath);
 std::vector<std::string> getLineFromCSV(std::istream& str, int lineNumber);

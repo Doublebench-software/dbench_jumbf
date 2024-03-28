@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbUuidBox::DbUuidBox()
 	{
-		set_box_type(BoxType::UUID);
+		set_box_type("uuid");
 	}
 
 	DbUuidBox::~DbUuidBox()
@@ -19,7 +19,7 @@ namespace dbench {
 
 	void DbUuidBox::set_box(unsigned char* uuid, unsigned char* uuid_payload, uint64_t uuid_payload_size)
 	{
-		set_box_type(BoxType::UUID);
+		set_box_type("uuid");
 		set_uuid(uuid);
 		set_box_payload(uuid_payload, uuid_payload_size);
 		set_box_size();
@@ -87,7 +87,11 @@ namespace dbench {
 		uint64_t header_size{ 8 };
 		lbox_ = db_get_4byte(&buf);
 		tbox_ = db_get_4byte(&buf);
-		box_type_ = db_identify_box_type(tbox_);
+		if (tbox_ != box_type_uuid) {
+			throw std::runtime_error("Error: De-Serializing UUID box, input buffer is not UUID box buffer.");
+			return;
+		}
+		tbox_str_ = "uuid";
 		if (lbox_ == 1) {
 			xl_box_ = db_get_8byte(&buf);
 			xl_box_present_ = true;

@@ -10,6 +10,20 @@ using namespace dbench;
 
 int main(int argc, const char* argv[])
 {
+	std::string type_str = "jumb";
+	uint32_t type = box_type_str_to_uint32(type_str);
+
+
+	std::string out = uint32_to_ASCII(type);
+	string xml_str = "this is just an example";
+	unsigned char* xml = reinterpret_cast<unsigned char*>(&xml_str[0]);
+	uint64_t xml_size = xml_str.size();
+	DbBox xml_box("xml ", xml, xml_size);
+	cout << xml_box.get_box_type_str() << endl;
+
+
+
+
 	if (argc < 2) {
 		cout << "Error: input arguments are not enough." << endl;
 		print_usage();

@@ -6,7 +6,7 @@
 namespace dbench {
 	DbCborJumbBox::DbCborJumbBox()
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		set_box_size();
 	}
 
@@ -17,13 +17,13 @@ namespace dbench {
 
 	DbCborJumbBox::DbCborJumbBox(DbCborBox cbor_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		cbor_content_box_ = cbor_box;
 		set_box_size();
 	}
 	DbCborJumbBox::DbCborJumbBox(DbCborBox cbor_box, DbFreeBox pading_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		cbor_content_box_ = cbor_box;
 		padding_box_ = pading_box;
 		set_box_size();
@@ -31,20 +31,20 @@ namespace dbench {
 	}
 	DbCborJumbBox::DbCborJumbBox(DbJumbDescBox desc_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		set_jumbf_description_box(desc_box);
 		set_box_size();
 	}
 	DbCborJumbBox::DbCborJumbBox(DbJumbDescBox desc_box, DbCborBox cbor_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		set_jumbf_description_box(desc_box);
 		cbor_content_box_ = cbor_box;
 		set_box_size();
 	}
 	DbCborJumbBox::DbCborJumbBox(DbJumbDescBox desc_box, DbCborBox cbor_box, DbFreeBox padding_box)
 	{
-		desc_box_.set_content_type(JumbfContentType::CBOR);
+		desc_box_.set_content_type(jumbf_type_cbor);
 		set_jumbf_description_box(desc_box);
 		cbor_content_box_ = cbor_box;
 		padding_box_ = padding_box;
@@ -57,7 +57,7 @@ namespace dbench {
 	}
 	void DbCborJumbBox::set_description_box(bool requestable, std::string label, bool id_present, uint32_t id, unsigned char* hash, DbBox* private_box)
 	{
-		desc_box_.set_box(JumbfContentType::CBOR, requestable, label, id_present, id, hash, private_box);
+		desc_box_.set_box(jumbf_type_cbor, requestable, label, id_present, id, hash, private_box);
 		set_box_size();
 	}
 	void DbCborJumbBox::set_box_size()
