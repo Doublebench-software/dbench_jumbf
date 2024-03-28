@@ -142,6 +142,7 @@ string get_jumbf_content_type_str(const unsigned char* type) {
 	}
 	return str;
 }
+
 unsigned char* db_get_jumbf_content_type_uuid(string type) {
 	unsigned char* jumb_content_type_uuid = nullptr;
 

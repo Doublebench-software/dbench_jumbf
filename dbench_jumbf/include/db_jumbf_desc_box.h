@@ -52,8 +52,7 @@ namespace dbench {
 
 		void set_box(const unsigned char* typein, bool requestable, std::string label, bool id_present, uint32_t ID, unsigned char* hash, DbBox* priv_box);
 
-		void set_box_size(); // set lbox or xl_box 
-		// type_in = 16 byte JUMB Content Type
+		void set_box_size(); 
 		void set_content_type(const unsigned char* type);
 		unsigned char* get_jumb_content_type();
 		void set_type_16bytes(const unsigned char* type);

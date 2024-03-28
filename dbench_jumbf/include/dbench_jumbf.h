@@ -10,9 +10,9 @@ namespace dbench {
 
 	constexpr auto MAX_32BIT_UINT_VALUE = 4294967295;
 
-	constexpr int major_ver = 2;  // compatibility changed
-	constexpr int minor_ver = 0;  // for backword compatible
-	constexpr int patch_ver = 0;  // for bug fixes
+	constexpr int jumbf_lib_major_ver = 2;  // compatibility changed
+	constexpr int jumbf_lib_minor_ver = 0;  // for backword compatible
+	constexpr int jumbf_lib_patch_ver = 0;  // for bug fixes
 
 	void print_lib_version();
 	enum class JpegMarker {                  /* JPEG marker codes */
@@ -98,18 +98,8 @@ namespace dbench {
 	constexpr unsigned char jumbf_type_json[16] =                  { 0x6A, 0x73, 0x6F, 0x6E, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 	constexpr unsigned char jumbf_type_uuid[16] =                  { 0x75, 0x75, 0x69, 0x64, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 	constexpr unsigned char jumbf_type_embedded_file[16] =         { 0x40, 0xCB, 0x0C, 0x32, 0xBB, 0x8A, 0x48, 0x9D, 0xA7, 0x0B, 0x2A, 0xD6, 0xF4, 0x7F, 0x43, 0x69 };
-	constexpr unsigned char jumbf_type_cbor[16] =                 { 0x63, 0x62, 0x6F, 0x72, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
+	constexpr unsigned char jumbf_type_cbor[16] =                  { 0x63, 0x62, 0x6F, 0x72, 0x00, 0x11, 0x00, 0x10, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 };
 
-	//enum class JumbfContentType {
-	//	CODESTREAM,      // 0x6579D6FB-DBA2-446B-B2AC-1B82FEEB89D1
-	//	XML,             // 0x786D6C20-0011-0010-8000-00AA00389B71
-	//	JSON,            // 0x6A736F6E-0011-0010-8000-00AA00389B71
-	//	UUID,			 // 0x75756964-0011-0010-8000-00AA00389B71
-	//	EMBEDDED_File,   // 0x40CB0C32-BB8A-489D-A70B-2AD6F47F4369
-	//	CBOR,			 // 0x63626F72-0011-0010-8000-00AA00389B71
-	//	JPEG360,
-	//	UNDEF
-	//};
 	bool isNthBitSet_1(unsigned char byte, int n);
 	bool db_put_byte(unsigned char** dst_buf, char data);
 	bool db_put_2byte(unsigned char** dst_buf, uint32_t data);
@@ -119,9 +109,6 @@ namespace dbench {
 	uint16_t db_get_2byte(unsigned char** buf);
 	uint32_t db_get_4byte(unsigned char** buf);
 	uint64_t db_get_8byte(unsigned char** buf);
-	unsigned char* db_get_jumbf_content_type_uuid(std::string type);
-	//JumbfContentType db_identify_jumbf_content_type(unsigned char* type_16b);
-	//BoxType db_identify_box_type(uint32_t tbox);
 	uint32_t box_type_str_to_uint32(std::string& type_str);
 	std::string uint32_to_ASCII(uint32_t input);
 

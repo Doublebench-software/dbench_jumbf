@@ -153,7 +153,7 @@ void print_uuid_as_str(unsigned char* uuid);
 void print_enc_params(CmdParams* enc_params);
 bool contains_directory(const string& path);
 string get_jumbf_content_type_str(const unsigned char* type);
-unsigned char* get_jumbf_content_type_uuid(string type);
+unsigned char* db_get_jumbf_content_type_uuid(string type);
 std::string combineFilePathAndFileName(const std::string& filePath, const std::string& fileName);
 int countRowsInCSV(const std::string& filePath);
 std::vector<std::string> getLineFromCSV(std::istream& str, int lineNumber);

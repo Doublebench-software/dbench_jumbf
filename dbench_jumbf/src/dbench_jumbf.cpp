@@ -9,7 +9,7 @@
 namespace dbench {
 	void print_lib_version()
 	{
-		std::cout << "Doublebench JUMBF Library : v" << major_ver << "." << minor_ver << "." << patch_ver << std::endl;
+		std::cout << "Doublebench JUMBF Library : v" << jumbf_lib_major_ver << "." << jumbf_lib_minor_ver << "." << jumbf_lib_patch_ver << std::endl;
 	}
 	// n should be 1<=n<=8;
 	bool isNthBitSet_1(unsigned char byte, int n)
@@ -99,138 +99,6 @@ namespace dbench {
 		return val1 + val2;
 	}
 
-	unsigned char* db_get_jumbf_content_type_uuid(std::string type) {
-		unsigned char* jumb_content_type_uuid = nullptr;
-		if (type == "CODESTREAM") {
-			jumb_content_type_uuid = new unsigned char[16];
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_contiguous_codestream[i];
-		}
-		else if (type == "XML") {
-			jumb_content_type_uuid = new unsigned char[16];
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_xml[i];
-		}
-		else if (type == "JSON") {
-			jumb_content_type_uuid = new unsigned char[16];
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_json[i];
-		}
-		else if (type == "UUID") {
-			jumb_content_type_uuid = new unsigned char[16];
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_uuid[i];
-		}
-		else if (type == "EMBEDDED FILE") {
-			jumb_content_type_uuid = new unsigned char[16]; // 0x40CB0C32-BB8A-489D-A70B-2AD6F47F4369
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_embedded_file[i];
-		}
-		else if (type == "CBOR") {
-			jumb_content_type_uuid = new unsigned char[16]; // 0x63626F72-0011-0010-8000-00AA00389B71
-			for (auto i = 0; i < 16; i++)
-				jumb_content_type_uuid[i] = jumbf_type_cbor[i];
-		}
-		return jumb_content_type_uuid;
-	}
-
-	//JumbfContentType db_identify_jumbf_content_type(unsigned char* type_16b)
-	//{
-	//	unsigned char* orig = nullptr;
-
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::CODESTREAM);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::CODESTREAM;
-	//	}
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::XML);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::XML;
-	//	}
-
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::JSON);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::JSON;
-	//	}
-
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::UUID);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::UUID;
-	//	}
-
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::EMBEDDED_File);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::EMBEDDED_File;
-	//	}
-
-	//	orig = db_get_jumbf_content_type_uuid(JumbfContentType::CBOR);
-	//	if (memcmp(orig, type_16b, 16) == 0) {
-	//		delete[] orig;
-	//		return JumbfContentType::CBOR;
-	//	}
-
-	//	//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEG360);
-	//	//if (memcmp(orig, type_16b, 16) == 0) {
-	//	//	delete[] orig;
-	//	//	return JumbfContentType::JPEG360;
-	//	//}
-
-	//	//orig = db_get_jumbf_content_type_uuid(JumbfContentType::JPEGSnack);
-	//	//if (memcmp(orig, type_16b, 16) == 0) {
-	//	//	delete[] orig;
-	//	//	return JumbfContentType::JPEGSnack;
-	//	//}
-	//	delete[] orig;
-	//	return JumbfContentType::UNDEF;
-	//}
-
-	//BoxType db_identify_box_type(uint32_t tbox)
-	//{
-	//	BoxType type = BoxType::UNDEF;
-	//	switch (tbox)
-	//	{
-	//	case 0x6a756d62:
-	//		type = BoxType::JUMB;
-	//		break;
-	//	case 0x6a756d64:
-	//		type = BoxType::JUMD;
-	//		break;
-	//	case 0X6A703263:
-	//		type = BoxType::JP2C;
-	//		break;
-	//	case 0X786D6C20:
-	//		type = BoxType::XML;
-	//		break;
-	//	case 0X6A736F6E:
-	//		type = BoxType::JSON;
-	//		break;
-	//	case 0X75756964:
-	//		type = BoxType::UUID;
-	//		break;
-	//	case 0x62696462:
-	//		type = BoxType::BIDB;
-	//		break;
-	//	case 0x62666462:
-	//		type = BoxType::BFDB;
-	//		break;
-	//	case 0x63626F72:
-	//		type = BoxType::CBOR;
-	//		break;
-	//	case 0x66726565:
-	//		type = BoxType::FREE;
-	//		break;
-	//	case 0x70726976:
-	//		type = BoxType::PRIV;
-	//		break;
-	//	default:
-	//		break;
-	//	}
-	//	return type;
-	//}
 
 	uint32_t box_type_str_to_uint32(std::string& type_str)
 	{
