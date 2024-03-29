@@ -760,7 +760,13 @@ void parse_csv_row_to_enc_params(vector<string> row, CmdParams* enc_params) {
 
 	string value = row[1];
 	// Column B
-	enc_params->jumbf_content_type = value;
+	if(value == "JP2C")
+		enc_params->jumbf_content_type = "CODESTREAM";
+	else if(value == "Embedded File")
+		enc_params->jumbf_content_type = "EMBEDDED FILE";
+	else
+		enc_params->jumbf_content_type = value;
+
 
 	// Column C
 	value = row[2];
