@@ -2,6 +2,13 @@
 # project specific logic here.
 #
 
+set(DBENCH_JUMBF_MAJOR_VERSION 2)
+set(DBENCH_JUMBF_MINOR_VERSION 0)
+set(DBENCH_JUMBF_PATCH_VERSION 0)
+set(JPEG_JUMBF_LIBRARY_VERSION
+    "${DBENCH_JUMBF_MAJOR_VERSION}.${DBENCH_JUMBF_MINOR_VERSION}.${DBENCH_JUMBF_PATCH_VERSION}")
+
+
 # Add source to this project's executable.
 file(GLOB SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "include/*.h")

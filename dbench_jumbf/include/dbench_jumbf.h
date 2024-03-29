@@ -103,7 +103,6 @@ namespace dbench {
 		UUID,			 // 0x75756964-0011-0010-8000-00AA00389B71
 		EMBEDDED_File,   // 0x40CB0C32-BB8A-489D-A70B-2AD6F47F4369
 		CBOR,			 // 0x63626F72-0011-0010-8000-00AA00389B71
-		JPEG360,
 		UNDEF
 	};
 	bool isNthBitSet_1(unsigned char byte, int n);
