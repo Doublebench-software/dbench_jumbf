@@ -5,7 +5,7 @@ namespace dbench {
 
 	DbFileDescBox::DbFileDescBox()
 	{
-		set_box_type("bdfd");
+		set_box_type("bfdb");
 	}
 
 	DbFileDescBox::~DbFileDescBox()
@@ -21,7 +21,7 @@ namespace dbench {
 
 	void DbFileDescBox::set_box(std::string media_type_v, std::string file_name_v, bool ext_ref)
 	{
-		this->set_box_type("bdfd");
+		this->set_box_type("bfdb");
 		this->set_media_type(media_type_v);
 		this->set_file_name(file_name_v);
 		this->set_external_reference(ext_ref);

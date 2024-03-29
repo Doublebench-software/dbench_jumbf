@@ -120,7 +120,9 @@ void parse_file(string input_file, CmdParams params) {
 	vector<uint64_t> jumb_buf_sizes;
 
 	if (file_ext == FileExtension::JUMBF) {
-		db_read_file_bitstream(input_file, &jumbf_buf, &jumbf_size);
+		db_read_file_bitstream(input_file, &jumbf_buf, &jumbf_size);		
+		if (jumbf_buf == nullptr)
+			return;
 		jumb_buffers.push_back(jumbf_buf);
 		jumb_buf_sizes.push_back(jumbf_size);
 	}
@@ -128,6 +130,8 @@ void parse_file(string input_file, CmdParams params) {
 		unsigned char* jpg_buf = nullptr;
 		uint64_t jpg_buf_size = 0;
 		db_read_file_bitstream(input_file, &jpg_buf, &jpg_buf_size);
+		if (jpg_buf == nullptr)
+			return;
 		int x = db_extract_jumbfs_from_jpg1(jpg_buf, jpg_buf_size, jumb_buffers, jumb_buf_sizes);
 		if (x == -1) {
 			cout << "Problem encountered in extracting JUMBF bitstream." << endl;
@@ -165,7 +169,8 @@ void db_parse(CmdParams const params)
 		vector<string> files_list = get_files_in_directory(params.input_dir);
 		for (int fno = 0; fno < files_list.size(); fno++)
 		{
-			string filename = combineFilePathAndFileName(params.input_dir, files_list[fno]);
+			//string filename = combineFilePathAndFileName(params.input_dir, files_list[fno]);
+			string filename = files_list[fno];
 			cout << "Parsing File No " << setw(6) << fno << "  => File : " << filename << endl;
 			parse_file(filename, params);
 		}

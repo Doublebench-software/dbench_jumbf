@@ -471,6 +471,10 @@ namespace dbench {
 				std::cout << "error: only " << in_file.gcount() << " could be read from input file";
 			in_file.close();
 		}
+		else {
+			std::cerr << "Error opening file: " << InputFile << std::endl;
+			return;
+		}
 	}
 	bool db_write_file_bitstream(std::string filename, const unsigned char* const data, const uint64_t data_size) {
 		try {
