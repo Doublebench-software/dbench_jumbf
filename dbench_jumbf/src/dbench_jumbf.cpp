@@ -151,7 +151,7 @@ namespace dbench {
 		uint32_t app11_header_size = 10 + jumb_header_size; //Le(2) + CI(2) + En(2) + Z(4) 
 		uint32_t jumb_data_size_per_marker = size_per_marker - app11_header_size;
 		uint32_t no_of_app11_required = static_cast<uint32_t>((jumbf_size / jumb_data_size_per_marker) + 1);
-		*output_buf_size = jpg_size + jumbf_size + ((static_cast<uint64_t>(app11_header_size) + 2) * no_of_app11_required) - 8; // -8 Tbox and Lbox of Jumb already covered in header size;
+		*output_buf_size = jpg_size + jumbf_size + ((static_cast<uint64_t>(app11_header_size) + 2) * no_of_app11_required) - jumb_header_size; // -8 Tbox and Lbox of Jumb already covered in header size;
 		*output_buf = new unsigned char[*output_buf_size];
 
 		unsigned char* dst_buf_position = *output_buf;

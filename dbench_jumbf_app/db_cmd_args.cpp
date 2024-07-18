@@ -33,7 +33,9 @@ void print_usage() {
 	cout << "\t                               .jpg, .jpeg" << endl;
 	cout << "\t-o             OUTPUTFILENAME  Specify output file name. default = \"db_output.jumbf\"" << endl;
 	cout << "\t                               .jpg, .jpeg, or .jumbf file." << endl;
-	cout << "\t-content_type  OUTPUTFILENAME  Specify JUMBF content type." << endl;
+	cout << "\t-i             INPUT FILENAME  Specify input file name for parsing only" << endl;
+	cout << "\t                               .jpg, .jpeg, or .jumbf file." << endl;
+	cout << "\t-content_type  CONTENT TYPE    Specify JUMBF content type." << endl;
 	cout << "\t                               Possible values are XML, JSON, JP2C, UUID, CBOR, EMBEDDED_FILE" << endl;
 	cout << "\t-lbox          0, 1 or NULL    Specify Lbox field ." << endl;
 	cout << "\t                               0 = box size will be file size i.e Box will continue till EOF." << endl;
@@ -43,7 +45,7 @@ void print_usage() {
 	cout << "\t-label         LABEL STRING    Specify Label for JUMB Description box." << endl;
 	cout << "\t-id            ID              Specify ID for JUMB Description box." << endl;
 	cout << "\t-hash          HASH            Specify hash/signature for JUMB Description box." << endl;
-	cout << "\t                               HASH should be string of 32 charachters. each 2 characters represent a HEX byte" << endl;
+	cout << "\t                               HASH should be string of 64 characters. each 2 characters represent a HEX byte" << endl;
 	cout << "\t-hash_file     HASH_FILE       Specify file name for hash/signature to put in JUMB Description box." << endl;
 	cout << "\t                               HASH_FILE should contain only string of 32 charachters. each 2 characters represent a HEX byte" << endl;
 	cout << "\t-private_data_file FILE_NAME   Specify file name for private box data to put in JUMB Description box." << endl;
@@ -52,7 +54,7 @@ void print_usage() {
 	cout << "\t-xml_file        FILE_NAME     Specify file name (.xml) for xml data to put in JUMBF Content box." << endl;
 	cout << "\t-json_file       FILE_NAME     Specify file name (.json) for json data to put in JUMBF Content box." << endl;
 	cout << "\t-uuid            UUID          Specify UUID for UUID field to put in JUMBF Content box." << endl;
-	cout << "\t                               UUID should be string of charachters. each 2 characters represent a HEX byte" << endl;
+	cout << "\t                               UUID should be string of characters. each 2 characters represent a HEX byte" << endl;
 	cout << "\t                               character \"-\" will ignored by the software." << endl;
 	cout << "\t                               e.g -uuid 663295b0-2158-42de-b16f-a4e458237885 " << endl;
 	cout << "\t                               e.g -uuid 663295b0215842deb16fa4e458237885 " << endl;
